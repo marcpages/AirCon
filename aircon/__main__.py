@@ -41,8 +41,6 @@ async def query_status_device(device: Device):
   while True:
     # In case the AC is stuck, and not fetching commands, avoid flooding
     # the queue with status updates.
-    while device.commands_queue.qsize() > 10:
-      await asyncio.sleep(_WAIT_FOR_EMPTY_QUEUE)
     device.queue_status()
     await asyncio.sleep(_STATUS_UPDATE_INTERVAL)
 
