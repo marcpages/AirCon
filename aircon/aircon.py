@@ -185,6 +185,14 @@ class Device(object):
     property_updater = lambda: self.update_property(name, typed_value)
     # Add as a high priority command.
     self.commands_queue.put_nowait(Command(10, time.time_ns(), command, property_updater))
+    
+    if self.commands_queue.qsize() > 6:
+      while not self.commands_queue.empty():
+        try:
+            self.commands_queue.get(False)
+        except Empty:
+            continue
+        self.commands_queue.task_done()
 
     self._queue_listener()
 
