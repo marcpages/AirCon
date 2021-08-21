@@ -21,5 +21,5 @@ git commit -a -m $NEW_VERSION
 git tag -d $NEW_VERSION
 git tag -a $NEW_VERSION -m $NEW_VERSION_MSG
 git push
-docker buildx build --platform linux/arm64 -t marcpages/aircon:$NEW_VERSION --push .
+docker buildx build --platform linux/armv7l -t marcpages/aircon:$NEW_VERSION --push .
 git push --tags
