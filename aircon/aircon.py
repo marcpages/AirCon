@@ -183,8 +183,6 @@ class Device(object):
     # There are (usually) no acks on commands, so also queue an update to the
     # property, to be run once the command is sent.
     property_updater = lambda: self.update_property(name, typed_value)
-    # Add as a high priority command.
-    self.commands_queue.put_nowait(Command(10, time.time_ns(), command, property_updater))
     
     if self.commands_queue.qsize() > 6:
       while not self.commands_queue.empty():
@@ -193,6 +191,9 @@ class Device(object):
         except Empty:
             continue
         self.commands_queue.task_done()
+    
+    # Add as a high priority command.
+    self.commands_queue.put_nowait(Command(10, time.time_ns(), command, property_updater))
 
     self._queue_listener()
 
